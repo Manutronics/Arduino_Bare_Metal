@@ -33,8 +33,8 @@ LDFLAGS = -Os -mmcu=atmega328p -L$(ARDUINO_CORE) -lm #-Wl,--verbose
 SRCS = $(PROJECT).c
 CORE_ASM_SRC = $(wildcard $(ARDUINO_CORE)/*.S)
 CORE_C_SRCS = $(wildcard $(ARDUINO_CORE)/*.c)
-# CORE_CPP_SRCS = $(filter-out $(ARDUINO_CORE)/main.cpp, $(wildcard $(ARDUINO_CORE)/*.cpp))
-CORE_CPP_SRCS = $(wildcard $(ARDUINO_CORE)/*.cpp)
+CORE_CPP_SRCS = $(filter-out $(ARDUINO_CORE)/main.cpp, $(wildcard $(ARDUINO_CORE)/*.cpp))
+# CORE_CPP_SRCS = $(wildcard $(ARDUINO_CORE)/*.cpp)
 
 # Object files
 OBJS = $(SRCS:.c=.o)
