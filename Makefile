@@ -11,6 +11,11 @@ PORT = COM15
 # Project name
 PROJECT = projeto
 
+# Paths
+ARDUINO_CORE = $(ARDUINO_DIR)/hardware/avr/1.8.6/cores/arduino
+ARDUINO_VARIANT = $(ARDUINO_DIR)/hardware/avr/1.8.6/variants/standard
+ARDUINO_LIBRARIES = $(ARDUINO_DIR)/hardware/avr/1.8.6/libraries
+
 # Compiler settings
 CC = $(AVR_TOOLS_DIR)/bin/avr-gcc
 CXX = $(AVR_TOOLS_DIR)/bin/avr-g++
@@ -26,9 +31,17 @@ LDFLAGS = -Os -mmcu=atmega328p -L$(ARDUINO_CORE) -lm #-Wl,--verbose
 
 # Source files
 SRCS = $(PROJECT).c
+CORE_ASM_SRC = $(wildcard $(ARDUINO_CORE)/*.S)
+CORE_C_SRCS = $(wildcard $(ARDUINO_CORE)/*.c)
+CORE_CPP_SRCS = $(filter-out $(ARDUINO_CORE)/main.cpp, $(wildcard $(ARDUINO_CORE)/*.cpp))
+# CORE_CPP_SRCS = $(wildcard $(ARDUINO_CORE)/*.cpp)
 
 # Object files
 OBJS = $(SRCS:.c=.o)
+CORE_ASM_OBJ = $(CORE_ASM_SRC:.S=.o)
+CORE_C_OBJS = $(CORE_C_SRCS:.c=.o)
+CORE_CPP_OBJS = $(CORE_CPP_SRCS:.cpp=.o)
+CORE_OBJS = $(CORE_C_OBJS) $(CORE_CPP_OBJS) $(CORE_ASM_OBJ)
 
 # Output files
 TARGET = $(PROJECT).elf
@@ -57,7 +70,7 @@ upload: $(HEX)
 	$(AVRDUDE) -C$(AVRDUDE_DIR)/etc/avrdude.conf -v -p m328p -c arduino -P $(PORT) -b 115200 -D -U flash:w:$(HEX):i
 
 clean:
-	rm -f $(OBJS) $(TARGET) $(HEX)
+	rm -f $(OBJS) $(CORE_OBJS) $(TARGET) $(HEX)
 
 check_dir:
 ifneq "$(OK)" "ok"
