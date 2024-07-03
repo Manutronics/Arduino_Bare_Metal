@@ -19,15 +19,3 @@ void loop() {
     digitalWrite(13, LOW); 
     delay(2000);
 }
-
-int main() {
-
-    init();
-
-    setup();
-
-    while(1){
-        loop();
-    }
-    return 0;
-}
