@@ -1,0 +1,4 @@
+proj_log
+*.elf
+*.hex
+*.o
